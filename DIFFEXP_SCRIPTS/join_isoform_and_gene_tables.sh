@@ -28,6 +28,7 @@ do
 	fi
 done
 
+
 if [ ! -f transcripts.counts.matrix ]
 then
 	$TRINITY_HOME/util/RSEM_util/merge_RSEM_frag_counts_single_table.pl $isoform_tables > transcripts.counts.matrix
@@ -62,10 +63,14 @@ then
 	exit -1
 fi
 
-mkdir DifferentialExpression
+if [ ! -d DifferentialExpression ]
+then
+	mkdir DifferentialExpression
+fi
 
-sed 's/\.RSEM\.isoforms.results//g' transcripts.counts.matrix > DifferentialExpression/transcripts.counts.matrix
-sed 's/\.RSEM\.genes.results//g' genes.counts.matrix > DifferentialExpression/genes.counts.matrix
+# Clean up headers of .matrix files and move them into their new home
+sed 's/\.genes\.results//g' genes.counts.matrix > DifferentialExpression/genes.counts.matrix
+sed 's/\.isoforms\.results//g' transcripts.counts.matrix > DifferentialExpression/transcripts.counts.matrix
 
 rm transcripts.counts.matrix
 rm genes.counts.matrix

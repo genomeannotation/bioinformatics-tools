@@ -9,7 +9,7 @@ mkdir CallSNPs CallSNPs/RUN CallSNPs/RESULTS
 if [ ! -f $SNP_FASTA ]
 then
 	#Filter fasta for snp calling
-	awk -f SCRIPTS/CALL_SNP_SCRIPTS/find_duplicate_gene_ids.awk FilterAssembly/RSEM_output/RSEM.isoforms.results
+	awk -f SCRIPTS/CALL_SNPS_SCRIPTS/find_duplicate_gene_ids.awk FilterAssembly/RSEM_output/RSEM.isoforms.results
 	pyfasta extract --fasta $RSEM_CODING_FASTA --header --exclude --file FilterAssembly/RSEM_output/RSEM.isoforms.results.discard > $SNP_FASTA
 	if [ "$?" -ne 0 ]
 	then

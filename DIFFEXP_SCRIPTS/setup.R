@@ -1,0 +1,6 @@
+library('edgeR')
+library('DESeq')
+library('ctc')
+library('Biobase')
+install.packages("gplots", ".R/libraries", "http://cran.us.r-project.org")
+install.packages("ape", ".R/libraries", "http://cran.us.r-project.org")
