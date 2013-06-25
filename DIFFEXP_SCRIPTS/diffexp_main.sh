@@ -49,7 +49,7 @@ then
 	fi
 
 	mkdir DifferentialExpression/Transcripts
-	mv edgeR.*.dir DifferentialExpression/Transcripts
+	mv edgeR.*.dir/* DifferentialExpression/Transcripts
 	rm -r edgeR.*.dir
 fi
 
@@ -126,6 +126,7 @@ then
 	exit -1
 fi
 
+# For genes
 echo "about to do analyze diff expr on genes..."
 cd DifferentialExpression/Genes
 $TRINITY_HOME/Analysis/DifferentialExpression/analyze_diff_expr.pl --matrix genes.counts.matrix.TMM_normalized.FPKM -P 1e-3 -C 2 
@@ -136,4 +137,23 @@ then
 	echo "Error with Trinity...analyze_diff_expr.pl, exiting script now"
 	exit -1
 fi
+
+# Next use the RData from above to define clusters by cutting tree at max height (using 50%, 40% and 25%)
+# For transcripts
+cd DifferentialExpression/Transcripts
+for percent in 50 40 25
+do
+	$TRINITY_HOME/Analysis/DifferentialExpression/define_clusters_by_cutting_tree.pl --Ptree $percent -R `ls | grep RData`
+	mv `ls | grep "RData\.clusters_fixed"` clusters_fixed_P_$percent
+done
+cd ../..
+
+# For genes
+cd DifferentialExpression/Genes
+for percent in 50 40 25
+do
+	$TRINITY_HOME/Analysis/DifferentialExpression/define_clusters_by_cutting_tree.pl --Ptree $percent -R `ls | grep RData`
+	mv `ls | grep "RData\.clusters_fixed"` clusters_fixed_P_$percent
+done
+cd ../..
 
