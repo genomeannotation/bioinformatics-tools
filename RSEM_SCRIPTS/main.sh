@@ -3,20 +3,25 @@
 # checking for errors as it goes...
 
 source SCRIPTS/options.cfg
+
 PATH_TO_RSEM_SCRIPTS="SCRIPTS/RSEM_SCRIPTS"
+
+function RunScript {
+	echo "about to call $1"
+	$PATH_TO_RSEM_SCRIPTS/$1
+	if [ "$?" -ne 0 ]
+	then
+		echo "$1 failed; exiting now."
+		exit -1
+	fi
+	echo "$1 complete"
+}
 
 function CheckDirectoryAndRunScript {
 # If directory $1 doesn't exist, run script $2
 	if [ ! -d $1 ]
 	then
-		echo "about to call $2"
-		$PATH_TO_RSEM_SCRIPTS/$2
-		if [ "$?" -ne 0 ]
-		then
-			echo "$2 failed; exiting now."
-			exit -1
-		fi
-	echo "$2 complete"
+		RunScript $2
 	fi
 }
 
@@ -24,14 +29,7 @@ function CheckFileAndRunScript {
 # If file $1 doesn't exist, run script $2
 	if [ ! -s $1 ]
 	then
-		echo "about to call $2"
-		$PATH_TO_RSEM_SCRIPTS/$2
-		if [ "$?" -ne 0 ]
-		then
-			echo "$2 failed; exiting now."
-			exit -1
-		fi
-	echo "$2 complete"
+		RunScript $2
 	fi
 }
 
