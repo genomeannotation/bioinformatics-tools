@@ -3,7 +3,6 @@
 # checking for errors as it goes...
 
 source SCRIPTS/options.cfg
-source SCRIPTS/helper_functions.sh
 
 PATH_TO_RSEM_SCRIPTS="SCRIPTS/RSEM_SCRIPTS"
 

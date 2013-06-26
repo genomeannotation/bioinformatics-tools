@@ -3,7 +3,6 @@
 #Sets up pipeline for SNP calling
 
 source SCRIPTS/options.cfg
-source SCRIPTS/helper_functions.sh
 
 function BuildPrefixes {
 	for y in RawReads/*
