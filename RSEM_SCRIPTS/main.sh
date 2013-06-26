@@ -3,46 +3,20 @@
 # checking for errors as it goes...
 
 source SCRIPTS/options.cfg
+source SCRIPTS/helper_functions.sh
 
 PATH_TO_RSEM_SCRIPTS="SCRIPTS/RSEM_SCRIPTS"
 
-function RunScript {
-	echo "about to call $1"
-	$PATH_TO_RSEM_SCRIPTS/$1
-	if [ "$?" -ne 0 ]
-	then
-		echo "$1 failed; exiting now."
-		exit -1
-	fi
-	echo "$1 complete"
-}
+CheckDirectoryAndRunScript "RawReads/concatenated" "$PATH_TO_RSEM_SCRIPTS/concatenate_raw_reads.sh"
 
-function CheckDirectoryAndRunScript {
-# If directory $1 doesn't exist, run script $2
-	if [ ! -d $1 ]
-	then
-		RunScript $2
-	fi
-}
+CheckDirectoryAndRunScript "FilterAssembly/RSEM_output" "$PATH_TO_RSEM_SCRIPTS/estimate_abundance.sh"
 
-function CheckFileAndRunScript {
-# If file $1 doesn't exist, run script $2
-	if [ ! -s $1 ]
-	then
-		RunScript $2
-	fi
-}
+CheckFileAndRunScript "FilterAssembly/RSEM_output/Trinity.RSEM_filtered.fasta" "$PATH_TO_RSEM_SCRIPTS/filter_by_RSEM.sh"
 
-CheckDirectoryAndRunScript "RawReads/concatenated" "concatenate_raw_reads.sh"
+CheckDirectoryAndRunScript "FilterAssembly/TransdecoderOutput" "$PATH_TO_RSEM_SCRIPTS/extract_best_orfs.sh"
 
-CheckDirectoryAndRunScript "FilterAssembly/RSEM_output" "estimate_abundance.sh"
+CheckFileAndRunScript "$RSEM_CODING_FASTA" "$PATH_TO_RSEM_SCRIPTS/filter_by_coding.sh"
 
-CheckFileAndRunScript "FilterAssembly/RSEM_output/Trinity.RSEM_filtered.fasta" "filter_by_RSEM.sh"
+CheckDirectoryAndRunScript "IndividualLibraryMappings" "$PATH_TO_RSEM_SCRIPTS/rsem_each_library.sh"
 
-CheckDirectoryAndRunScript "FilterAssembly/TransdecoderOutput" "extract_best_orfs.sh"
-
-CheckFileAndRunScript "$RSEM_CODING_FASTA" "filter_by_coding.sh"
-
-CheckDirectoryAndRunScript "IndividualLibraryMappings" "rsem_each_library.sh"
-
-CheckFileAndRunScript "IndividualLibraryMappings/library_alignment_info" "get_individual_alignment_data.sh"
+CheckFileAndRunScript "IndividualLibraryMappings/library_alignment_info" "$PATH_TO_RSEM_SCRIPTS/get_individual_alignment_data.sh"
