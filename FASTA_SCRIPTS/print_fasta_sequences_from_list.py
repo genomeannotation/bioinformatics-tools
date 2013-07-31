@@ -1,4 +1,8 @@
 #!/usr/bin/env python
+## Prints (to stdout) fasta sequences whose ids
+## are found in a file. Does not require that
+## either file be sorted, so low performance.
+## Meh, I got all day.
 
 import sys
 import Bio
