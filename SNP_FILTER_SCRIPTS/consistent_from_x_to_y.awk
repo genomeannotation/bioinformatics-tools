@@ -17,9 +17,9 @@ BEGIN {
 		#part of the header, then.
 		print; 
 	} else {
-		call=$FROM
+		call=substr($FROM, 1, 3)
 		for (i=FROM+1; i<=TO; i++) {	
-			if ($i != call) {
+			if (substr($i, 1, 3) != call) {
 				next;
 			}
 		}
