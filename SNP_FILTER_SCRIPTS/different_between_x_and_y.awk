@@ -7,7 +7,7 @@
 BEGIN {
 	if (x == "" || y == "") {
 		print "Usage: awk -f different_in_x_and_y.awk -v x=__ -v y=__ <input.vcf>" > "/dev/stderr";
-		print "(where FROM and TO specify the column range to check)" > "/dev/stderr";
+		print "(where x and y specify the columns to check)" > "/dev/stderr";
 		exit;
 	}
 	comment_regex="^#";

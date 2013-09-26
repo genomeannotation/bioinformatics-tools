@@ -5,8 +5,8 @@
 # writes to stdout
 
 BEGIN {
-	if (FROM == "" || TO == "") {
-		print "Usage: awk -f no_heteros_from_x_to_y.awk -v FROM=__ TO=__ <input.vcf>" > "/dev/stderr";
+	if (x == "" || y == "") {
+		print "Usage: awk -f no_heteros_from_x_to_y.awk -v x=__ -v y=__ <input.vcf>" > "/dev/stderr";
 		print "(where FROM and TO specify the column range to check)" > "/dev/stderr";
 		exit;
 	}
