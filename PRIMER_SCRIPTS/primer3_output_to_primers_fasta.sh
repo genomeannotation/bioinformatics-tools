@@ -5,8 +5,6 @@ if [ $# -ne 2 ]; then
     exit -1
 fi
 
-input_file=$1
-num_pairs=$2
 
 function RepeatSeqID {
     for (( i=0; i<$num_pairs; i++ ))
@@ -16,7 +14,7 @@ function RepeatSeqID {
 }
 
 function GetSeqIDs {
-    tmp_seqs=$(grep "SEQUENCE_ID" $input_file | sed 's/.*=//')
+    tmp_seqs=$(grep "SEQUENCE_ID" input_file | sed 's/.*=//')
     for line in $(echo "$tmp_seqs")
     do
         RepeatSeqID $line
@@ -24,11 +22,12 @@ function GetSeqIDs {
 }
 
 function GetLefts {
-    grep "PRIMER_LEFT.*SEQUENCE" $input_file | sed 's/.*=//'
+    grep "PRIMER_LEFT.*SEQUENCE" input_file | sed 's/.*=//'
 }
 
 function GetRights {
-    grep "PRIMER_RIGHT.*SEQUENCE" $input_file | sed 's/.*=//'
+    foo=$(grep "PRIMER_RIGHT.*SEQUENCE" input_file | sed 's/.*=//')
+    AllCaps "$foo"
 }
 
 function ReverseRights {
@@ -42,10 +41,18 @@ function ReverseRights {
     fastx_reverse_complement | grep -v ">foo" 
 }
 
+function AllCaps {
+    input=$1
+    echo ${input^^}
+}
+
+num_pairs=$2
+
 # Create temp directory and move into it, linking input file
 mkdir primer3_output_to_primers_fasta_temp
 cd primer3_output_to_primers_fasta_temp
-ln -s ../$input_file
+pwd
+ln -s ../$1 input_file
 
 GetSeqIDs > seq_ids
 GetLefts > lefts
