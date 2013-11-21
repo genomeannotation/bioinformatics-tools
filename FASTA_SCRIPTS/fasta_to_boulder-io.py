@@ -13,4 +13,5 @@ input_fasta = sys.argv[1]
 for seq_record in SeqIO.parse(input_fasta, "fasta"):
     print("SEQUENCE_ID="+seq_record.id)
     print("SEQUENCE_TEMPLATE="+seq_record.seq)
+    print("=")
 

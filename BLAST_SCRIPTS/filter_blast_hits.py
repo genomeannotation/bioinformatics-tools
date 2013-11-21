@@ -1,36 +1,68 @@
 #!/usr/bin/env python
 
-# expects input of tabular blast results, possibly with multiple entries per query
-# will output a maximum of one line per query, assuming it has acceptable (user-provided)
-# e-value and length
+## almost pau but figured out how to do it with unix tools so effit...
 
 import sys
 import csv
+import re
 
-if len(sys.argv) != 4:
-    sys.stderr.write("usage: python filter_blast_hits.py <input.blastout> <maximum.e-value> <minimum.length>\n")
+if len(sys.argv) != 2:
+    sys.stderr.write("usage: python primer3_output_to_primers_fasta.py <input.primer3out>\n")
     sys.exit()
 
-blastout_file = sys.argv[1]
-max_e = float(sys.argv[2])
-min_len = int(sys.argv[3])
-matched_genes = []
-writer = csv.writer(sys.stdout, delimiter='\t', quoting=csv.QUOTE_NONE)
+primer3_output = sys.argv[1]
 
-def passing_score(line):
-    if float(line[10]) <= max_e and int(line[3]) >= min_len:
-        return True
+current_seq_id = ""
+current_primer_seq = ""
+prim_seq_re = re.compile("PRIMER_.*[0-9]_SEQUENCE")
+left_re = re.compile("_LEFT_")
+right_re = re.compile("_RIGHT_")
+num_re = re.compile("[0-9]+")
+
+def primer_sequence(string):
+    return prim_seq_re.search(string)
+
+def equals_sign(line):
+    return line.split('=')[0] == ''
+
+def clear_variables():
+    current_seq_id = ""
+    current_primer_seq = ""
+
+def left_or_right(string):
+    if left_re.search(string):
+        return "left"
+    elif right_re.search(string):
+        return "right"
     else:
-        return False
+        return None
 
-def already_matched(gene_id):
-    return gene_id in matched_genes
+def get_number(string):
+    match = num_re.search(string)
+    return match.group()
 
-with open(blastout_file, 'rb') as file:
-    reader = csv.reader(file, delimiter='\t')
-    for line in reader:
-        gene_id = line[0]
-        if passing_score(line) and not already_matched(gene_id):
-            writer.writerow(line)
-            matched_genes.append(line[0])
+def get_primer_info(key_val):
+    left_right = left_or_right(key_val[0])
+    num = get_number(key_val[0])
+    seq = key_val[1]
+    return [left_right, num, seq]
 
+with open(primer3_output, 'rb') as file:
+    for line in file:
+        if '=' not in line:
+            # something has gone horribly wrong.
+            continue
+        elif equals_sign(line):
+            # '=' is the divider between sequences
+            clear_variables()
+        else:
+            # line actually contains information
+            entries = line.split('=')
+            if primer_sequence(entries[0]):
+                leftright, number, seq = get_primer_info(entries)
+                if info[0] == 'left':
+                    current_primer_seq = info[2]
+                if info[1] == 'right':
+                    current_primer_seq += reverse_complement(info[2])
+                    write_seq_to_fasta(info[1])
+                    current_primer_seq = ""
