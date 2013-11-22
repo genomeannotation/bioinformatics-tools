@@ -51,7 +51,6 @@ num_pairs=$2
 # Create temp directory and move into it, linking input file
 mkdir primer3_output_to_primers_fasta_temp
 cd primer3_output_to_primers_fasta_temp
-pwd
 ln -s ../$1 input_file
 
 GetSeqIDs > seq_ids
