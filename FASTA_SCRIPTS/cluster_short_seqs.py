@@ -34,4 +34,6 @@ with open(input_file, 'r') as file:
             print("new_cluster returned true on " + line)
             wrap_up_cluster(line)
         process_line(line)
+    # take care of last cluster
+    wrap_up_cluster(line)
 
