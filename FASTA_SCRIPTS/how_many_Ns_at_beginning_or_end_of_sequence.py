@@ -19,7 +19,7 @@ def count_from_the_top(record):
         if base == "N" or base == "n":
              count += 1
         else:
-            print "I found " + str(count) + " Ns at the beginning."
+            print record.id + "\tbeginning\t" + str(count)
             break
 
 def count_from_the_end(record):
@@ -28,7 +28,7 @@ def count_from_the_end(record):
         if base == "N" or base == "n":
             count += 1
         else:
-            print "I found "+ str(count) + " Ns at the end."
+            print record.id + "\tend\t" + str(count)
             break
 
 
