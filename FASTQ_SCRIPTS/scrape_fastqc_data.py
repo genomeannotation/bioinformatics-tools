@@ -29,6 +29,8 @@ def scrape(io_buffer):
             output += samplename + '\t'
         elif line.startswith("Total Sequences"):
             output += line.split('\t')[1] + '\t'
+        elif line.startswith("Sequence length"):
+            output += line.split('\t')[1] + '\t'
         elif line.startswith("%GC"):
             output += line.split('\t')[1] + '\t'
         elif line.startswith(">>Per base sequence quality"):
