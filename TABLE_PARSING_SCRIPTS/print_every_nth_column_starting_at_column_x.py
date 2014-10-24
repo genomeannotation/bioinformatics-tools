@@ -11,7 +11,7 @@ x = int(sys.argv[3])
 
 with open(sys.argv[1]) as infile:
     for line in infile:
-        splitline = line.strip().split()
+        splitline = line.strip().split("\t")
         output_columns = splitline[x::n]
         print("\t".join(output_columns))
 
