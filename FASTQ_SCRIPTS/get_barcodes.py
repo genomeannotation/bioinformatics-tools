@@ -49,8 +49,18 @@ def main():
             count = str(barcode_tuple[1])
             print(barcode + "\t" + count)
     elif args.middle:
-        # TODO
-        pass
+        n = int(args.number)
+        number_of_barcodes = len(sorted_barcodes)
+        if n > number_of_barcodes:
+            start_index = 0
+            end_index = number_of_barcodes
+        else:
+            start_index = number_of_barcodes/2 - n/2
+            end_index = start_index + n
+        for barcode_tuple in sorted_barcodes[start_index:end_index]:
+            barcode = barcode_tuple[0]
+            count = str(barcode_tuple[1])
+            print(barcode + "\t" + count)
 
 ##########################
 
