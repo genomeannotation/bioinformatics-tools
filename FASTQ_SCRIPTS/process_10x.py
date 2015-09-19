@@ -9,7 +9,7 @@
 import sys
 
 if len(sys.argv) != 4:
-    print("usage: process_10x.py <prefix>")
+    print("usage: process_10x.py <I1.fastq> <I2.fastq> <interleaved.fastq>\n")
     exit()
 
 barcode_file_1 = sys.argv[1]
