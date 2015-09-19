@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 
 # Read a fastq file with barcodes encoded like so:
-# TODO
+# @HISEQ:415:C79RLANXX:6:1101:1240:1959 1:N:0: ACTAGCCC|0|GATGAATCGACTGT|0
+# where 'GATGAATCGACTGT' is the barcode of interest
 # Also read a list of barcodes
 # For each barcode, write a file containing all reads
 # with that barcode in the header. Name the file
@@ -10,8 +11,10 @@
 import sys
 
 def get_barcode(line):
-    # TODO
-    return "GATTACA"
+    fields = line.strip().split()
+    barcodes = fields[-1]
+    barcode_fields = barcodes.split("|")
+    return barcode_fields[2]
 
 # Check command line args
 if len(sys.argv) != 3:
