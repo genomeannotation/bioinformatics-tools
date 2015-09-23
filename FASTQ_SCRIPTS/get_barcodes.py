@@ -8,6 +8,23 @@ import sys
 import argparse
 import operator
 
+def get_barcode_counts_dict(filename):
+    barcode_counts = {}
+    line_counter = 0  # each read takes 4 lines, but we only care about line 2
+    with open(filename, 'r') as fastq:
+        for line in fastq:
+            if line_counter == 4:
+                line_counter = 1
+            else:
+                line_counter += 1
+            if line_counter == 2:
+                barcode = line.strip()
+                if barcode in barcode_counts:
+                    barcode_counts[barcode] += 1
+                else:
+                    barcode_counts[barcode] = 1
+    return barcode_counts
+
 def main():
     # Parse dem args
     parser = argparse.ArgumentParser()
@@ -21,20 +38,7 @@ def main():
         sys.exit()
 
     # Read fastq file, store counts for each barcode
-    barcode_counts = {}
-    line_counter = 0  # each read takes 4 lines, but we only care about line 2
-    with open(args.fastq, 'r') as fastq:
-        for line in fastq:
-            if line_counter == 4:
-                line_counter = 1
-            else:
-                line_counter += 1
-            if line_counter == 2:
-                barcode = line.strip()
-                if barcode in barcode_counts:
-                    barcode_counts[barcode] += 1
-                else:
-                    barcode_counts[barcode] = 1
+    barcode_counts = get_barcode_counts_dict(args.fastq)
 
     # Get a sorted list of (barcode, count) tuples
     # Is there a smarter way to do this? TODO
